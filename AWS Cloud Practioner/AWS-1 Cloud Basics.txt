@@ -1,0 +1,26 @@
+Silver Lining in the cloud
+
+.Providing the provisioning (renting) resources.
+---> On demand resource provisioning
+---> Also called Elasticity
+
+Cloud - Advantages
+
+. Trade "capital expense" for "variable expense"
+
+. Benefit from massive economies of scale
+
+. Stop guessing capacity
+
+. Increase speed and agility
+
+. Stop spending money running and maintaining data centres
+
+. "Go global" in minutes
+
+------------------------------------------------------------------
+
+Amazon Web Services (AWS)
+
+. Cloud applications make use of multiple AWS services.
+

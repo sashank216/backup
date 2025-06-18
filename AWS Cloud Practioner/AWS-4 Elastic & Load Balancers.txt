@@ -1,0 +1,257 @@
+IAAS ( Infrastructure as a Service )
+
+. Use only infra from cloud provider
+-> Computers ( Virtual or on dedicated hardware), data storage
+   space and Networking features
+
+. Also called "Lift and Shift"
+-> Example: Using EC2 to deploy your applications
+-> Example: Using EC2 to create your db
+
+. Cloud Provider is responsible for:
+ -> Physical Infra (Hardware, Networking)
+ -> Virtulization Layer( Hypervisor, Host OS)
+
+. Customer is responsible for:
+
+  -> Guest OS upgrades and patches
+  -> Application Code and Runtime
+  -> Availability, Fault Tolerance, Scalability etc.
+
+ Application
+
+ Application Runtime ----->   ---->|
+
+ OS                 ------>   ---->
+
+ Virtualization  ----->       ---->  PAAS
+
+ Physical Hardware ----> IAAS ---->
+ 
+ Networking        ----->     ---->
+
+
+
+PAAS (Platform as a Service)
+
+. Use platfrom provided by cloud
+. Cloud provider is responsible for:
+--> OS ( incl. upgrades and patches)
+--> Application Runtime
+---> Auto Scaling, Availability & Load Balancing etc...
+
+. Customer is responsible for:
+
+--> Application code and/or
+--> Configuration
+
+-----------------------------------------------------------------------
+
+AWS Managed Service Offerings
+
+. Elastic Load Balancing - Distribute incoming traffic across multiple targets
+
+. AWS Elastic Beanstalk - Run and Manage Web Apps
+
+. Amazon RDS - Relational Databases - MySQl, Oracle, SQL Server etc
+
+---------------------------------------------------------------------------
+
+ELastic Load Balancer
+
+. Distribute traffic across EC2 instances in one or more AZs in a single region
+
+. Managed service - AWS ensures that is highly available
+
+. Auto scales to handle huge loads 
+
+. Load Balancers can be public or private
+
+. Health checks - route traffic to healthy instances
+
+-> Load Balancer contains the health information of the server
+-> Only the server which is healthy the load gets diverted
+
+Three types of Elastic Load Balancers
+
+. Classic Load Balancer ( layer 4 and Layer 7)
+-> Old generation
+
+. Application Load Balancer (Layer 7)
+-> Most popular
+-> New generation (http/https) (http is unsecure)
+-> Supports advanced routing approaches (Headers, Query Params, path and Host Based)
+
+. Network Load Balancer (Layer 4)
+
+-> New generation supporting TCP/TLS and UDP
+-> Very high performance usecases
+
+-------
+
+There is a fourth type of Load Balancer as well - Gateway Load Balancer
+
+The Gateway Load Balancer (GWLB) is a specialized load balancer designed to deploy, scale, and manage third-party virtual appliances on AWS. It allows for seamless traffic distribution across multiple virtual appliances, providing a single entry point for all traffic while offering scalability and increased availability.
+
+Key Points:
+
+Purpose: Used to deploy, scale, and run third-party virtual appliances.
+
+Functionality: Distributes traffic across multiple virtual appliances, scaling them based on demand, reducing potential points of failure, and enhancing network availability.
+
+AWS Marketplace: Enables finding, testing, and purchasing virtual appliances directly from third-party vendors, simplifying the deployment process and accelerating time-to-value.
+
+This addition ensures that users can efficiently manage their network traffic while leveraging third-party solutions directly within AWS.
+
+------------------------
+
+Target Group:
+
+Suppose there are 5 servers and the uer wants to distribute the load
+only to 2 servers and remaining 3 servers should be left nill
+
+So with the 2 servers a target group can be created( only the servers
+where the requests are divided equally - target group can be created)
+
+------------------------------------------
+
+
+Brief Info How Lb works:
+
+Suppose let's take 2 servers these 2 servers have different IP addresses and these 2 IP addresses are attached with a Load balancer and this LB provides A DNS NAME
+with the help of DNS name if the user tries to access the application - the request then moves to each ip addresses
+
+DNS Name and Ip addreses: just like google.com, facebook.com
+
+To get the dns name other than default one like : whswbubuehwbwu-us-east-1.janhs.com
+The owners buy the domains from godaddy or route53 (ex: paytm.com) the domain which is bought is attached to LB
+(ex: paytm.com is attached to whswbubuehwbwu-us-east-1.janhs.com ) 
+( once launched the request reaches the lb and lb diverts the request to servers(ipaddresses) which has less request compared to others (it would be priority)
+----------------------------------------------------------------------------------------------------------------------
+
+Application Load Balancer 
+
+Creation:
+
+1. Configure Load Balancer
+
+2. Configure Security Settings
+
+3. Configure Security Groups
+
+4. Configure Routing
+
+5. Register Targets
+
+6. Review
+
+--------------------------------------------------------------------
+
+ 
+Availability
+
+. Are the applications available when the users need them?
+
+. Percentage of time an application provides the operations expected
+of it
+
+. Example: 99.99% availability. Also called four 9's availability
+
+Availability Basics - Ec2 and ELB
+
+-> Deploy to multiple AZs
+
+-> Deploy to multiple regions
+
+----------------------------------------------------------------------------
+
+Scalability
+
+. Ability to adapt to changes in demand ( users, data)
+
+-> Deploy to a biggere instance with bigger CPU and more memory
+-> Increase the number of applications instances and setup a load balancer
+..
+
+Vertical Scaling
+
+. Deploying application/db to biggere instance.
+-> A larger hard drive
+-> A faster CPU
+-> More RAM, CPU,I/O, or networking cpabilities
+
+. There are limits to vertical scaling
+ -> Increasing EC2 instance size:
+    . t2.micro to t2.small or
+    . t2.small to t2.2xlarge 
+
+
+Horizontal Scaling
+
+. Deploying multiple instances of application/db
+. Horizontal scaling is preferred to vertical scaling
+
+ . Vertical scaling has limits
+ . Vertical can be expensive
+ . Horizontal scaling increases availability
+
+. Horizontal Scaling needs additional infra:
+ -> LB etc
+
+ Horizontal Scaling for EC2
+
+. Distribute EC2 instances
+ -> in a single AZ
+ -> in multiple AZs in single region
+ -> in multiple AZs in multiple regions
+
+. Auto Scale: Auto Scaling Group
+
+. Distribute Load : ELB
+
+------------------------------------------------------------------------------
+
+EC2 Tenancy - Shared vs Dedicated
+
+. Shared Tenancy ( Default)
+ 
+ -> Single Host machine can have instances from multiple customers
+
+. EC2 Dedicated instances
+
+ -> Virtualized instances on hardware dedicated to one customer
+ -> You dont not have visibility into the hardware of underlying host
+
+. EC2 Dedicated Hosts
+
+ -> Physical servers dedicated to one customer
+ -> You have visibility into the hardware of underlying hosts ( sockets and physical cores)
+ -> ( Use cases ) Regulatory needs or server-bound software licenses like
+    Window Server, SQL Server
+
+
+-------------------------------------------------------------------
+
+
+.EC2 On- Demand - Cost high and flexibility used for web application
+ ( Spiky workloads)
+ 
+.EC2 Spot instances - Bid a price ( old model) (New model) quote your max price
+(cost sensitive, fault tolerant, non immediate workloads)
+can be terminated at any point
+
+EC2 Reserved Instances
+( constant workloads that run all the time)
+. Reserve EC2 instances ahead of time
+. Get upto 75% off
+
+EC2 savings plans 
+( constant workloads that run all the time and you want more flexibility)
+
+
+
+-----------------------------------------------------------------------
+
+
+
+

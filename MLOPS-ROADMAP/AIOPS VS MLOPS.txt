@@ -1,0 +1,57 @@
+AIOPS:
+
+Using AI reducing IT operations : which can predict or which cannot be predicted too
+
+Popular usecase:
+
+. Observability : Current State
+
+AIOPS: It can predict future state of the system
+
+It can analyze and anitcipate and avoid the drastic measures
+
+It can slack notifictions to the team
+
+AIOPS solution to K8s cluster
+
+AIOPS understands anomolies of K8s cluster,AIOPS avoids them
+
+
+AIOPS solution + CI/CD
+
+with the LLMS , open AI
+
+AIOPS provides workarounds
+
+TOOLS: observability platforms custom AI Solutions (python scripts and shell scripts) interact with local models and open AI models and reduce IT operations
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+MLOPS:
+
+Reducing operations with respecitve machine learning lifecycle 
+
+Same as DevOps but the workflow is not about sdlc it is about traditional mlworkflow
+
+mlworkflow:
+
+- Definition of problem
+
+- Data collection
+
+- Data cleaning and Data processing
+
+- Fine tuning of the data
+
+- Model selection
+
+- Training of the model
+
+- Deployment of the model
+
+- Monitoring 
+
+MLOPS: Reduces manual operation and automates and unifies the gap between ml and operations that are involved
+
+
+TOOLS: AWS Sagemaker, MLflow, kubeflow

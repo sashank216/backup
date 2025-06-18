@@ -1,0 +1,302 @@
+ReplicationController and ReplicatSet = Lower Level objects
+
+They check whether the pods are running state or not
+
+They don't perform the rollback or rollcommit
+
+.mkdir manifest
+
+.cd manifest
+
+. vim rs.yml
+
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+   name: my-rs
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: kops
+  template:
+    metadata:
+      labels:
+        app: kops
+  spec:
+    containers:
+    - name: cont-1
+      image: shaikmustafa/cycle
+      ports:
+      - containerPort: 80
+
+. kubectl create -f rs.yml
+
+. kubectl get rs
+
+. kubectl get pods
+
+. kubectl scale rs my-rs --replicas=8
+
+. kubectl scale rs my-rs --replicas=3
+
+
+vim service.yml
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-svc
+spec:
+  type: NodePort
+  selector:
+     app: kops
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30008
+
+. kubectl create -f service.yml
+
+. if we now change the image of the pod file
+
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+   name: my-rs
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: kops
+  template:
+    metadata:
+      labels:
+        app: kops
+  spec:
+    containers:
+    - name: cont-1
+      image: shaikmustafa/my-game
+      ports:
+      - containerPort: 80
+
+. kubectl aply -f rs.yml
+
+it does take some time to create new pods and delete the old pods
+
+The Drawback:
+
+Here Replica set is an lower level object which focus on maintaining desired number of replica pods
+
+To manage this replica set we need a higher-level object called deployment which provide additional functionality like rolling updates and roll backs
+
+Deployments use ReplicaSets under the hood to manage the actual pods that run the application
+
+Deployment:
+
+. It has features of Replicaset and some other extra features like updating and rollbacking to a particular version
+
+. The best part of Deployment is we can do it without downtime
+
+. You can update the container image or config of the application
+
+. Deployments also provide features such as versioning , which allow you tracking the history of changes to the application
+
+. It has a pause feature, which allows yiu to temporarily suspend updates to the application
+
+. Scaling can be done manually or automatically based on metrics such as CPU utilization or requests per second
+
+. Deployment will create ReplicaSet, ReplicaSet will create Pods
+
+. If you delete Deployment, it will delete ReplicaSet and then replicaSet will delete pods
+
+. kubectl delete rs my-rs
+
+
+. vim deployment.yml
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flm
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      course: devops
+  template:
+    metadata:
+      labels:
+       course: devops
+    spec:
+      containers:
+      - name: cont-1
+        image: shaikmustafa/cycle
+        ports:
+        - containerPort: 80
+
+.kubectl create -f deployment.yml
+
+. kubectl get deploymet
+
+. kubectl get pods
+
+. vim service.yml
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-svc
+spec:
+  type: NodePort
+  selector:
+    course: devops
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 301010
+
+. kubectl create -f service.yml
+
+. kubectl get deployment -o wide
+
+
+
+. TO UPDATE AN IMAGE: kubectl set image deployment/flm cont-1=shaikmustafa/dm
+
+. TO CHECK THE STATUS OF ROLLOUT: kubectl rollout status deployment/flm
+
+. TO SEE HISTORY OF OUR DEPLOYMENT: kubectl rollout history deployment/flm
+
+. kubectl set image deployment/flm cont-1=shaikmustafa/mygame
+
+. kubectl rollout history deployment/flm
+
+. kubectl set image deployment/flm cont-1=nginx
+
+. kubectl set image deployment/flm cont-1=httpd
+
+. TO GOT TO PREV VERSION: kubectl rollout undo deployment/flm --to-revision=3
+
+. TO PAUSE THE POD: kubectl rollout pause deployment/flm
+
+. TO RESUME THE POD: kubectl rollout resume deployment/flm
+
+. TWO WAYS TO SCALE THE PODS:
+
+command: kubectl scale deployment/flm --replicas=6
+
+. kubectl scale deployment/flm --replicas=4
+. kubectl get pods
+. vim deployment.yml
+
+SECOND WAY THROUGH YAML FILE:
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flm
+spec:
+  replicas: 12
+  selector:
+    matchLabels:
+      course: devops
+  template:
+    metadata:
+      labels:
+       course: devops
+    spec:
+      containers:
+      - name: cont-1
+        image: shaikmustafa/cycle
+        ports:
+        - containerPort: 80
+
+
+.kubectl apply -f deployment.yml
+
+
+Imperative:
+
+. kubectl create deployment aws --image=shaikmusatafa/dm  --replicas=3
+
+. kubectl delete deployment aws
+
+. kubectl get deployment
+
+Pod logs: kubectl pod logs
+
+
+
+
+Vertical Scaling :
+
+One pod gets increased by cpu and ram
+
+
+Horizontal Scaling:
+
+No of pods are increased
+
+
+. kubectl get pods
+
+. kubectl autoscale deployment/flm --min=5 --max=10 --cpu-percent=20
+
+. kubectl get deployment
+
+. kubectl get pods
+
+. kubectl get svc
+
+. kubectl delete svc
+
+. kubectl delete svc my-svc
+
+. kubectl create -f service.yml
+
+. kubectl get svc
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+DEAMON SET:
+
+vim daemon.yml
+
+---
+apiVersio: apps/v1
+kind: DaemonSet
+metadata:
+  name: my-ds
+spec:
+  selector:
+    matchLabels:
+      app: zomato
+  template:
+    metadata:
+       labels:
+         app: zomato
+    spec:
+      containers:
+      - name: cont-2
+        image: shaikmustafa/mygame
+        ports:
+        - containerPort: 80
+
+.kubectl create -f daemon.yml
+
+.kops edit ig --name=vishnu.k8s.local nodes-us-east-1a
+
+.kops update cluster --name vishnu.k8s.local --yes --admin
+
+.
+
+
+
+

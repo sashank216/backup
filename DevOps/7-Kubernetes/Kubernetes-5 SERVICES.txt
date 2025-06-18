@@ -1,0 +1,170 @@
+To create bucket: alternate command:
+
+aws s3 mb s3://vishnu.k8s.kops
+
+
+To create cluster n number of masters and nodes:
+
+kops create cluster --name vishnu.k8s.local --zones=ap-south-1a --node-count=4  --master-count=1 --node-size=t2.micro --master-size=t2.medium
+
+To edit the cluster: kops edit cluster vishnu.k8s.local
+
+To edit the master instance group: kops edit ig --name=vishnu.k8s.local master-ap-south-1a
+
+Kubernetes Services:
+
+. Service is a method for exposing Pods in your cluster
+
+. Each Pod gets its own IP address But we need to access from Ip of the Node
+
+. If you want to access pod from inside we use Cluster-IP.
+
+. If the service is of type NodePort or LoadBalancer, it can also be accesed from outside the cluster
+
+.It enables the pods to be decoupled from the network topology, which makes it easier to manage and scale applications
+
+Types:
+
+. Cluster-IP - To access the application within the server
+. Node Port  -
+. Load Balancer - To access the application on the internet
+. External Name - To access through dns name
+
+
+1.ClusterIP: A ClusterIP service provides a stable IP address and DNS name for pods within a cluster. This type of service is only accessible within the cluster and is not exposed externally
+
+2.NodePort: A NodePort service provides a way to expose a service on a static port on eaxh node in the cluster. This type of service is accessible both within the cluster and externally using the node's IP address and NodePort
+
+3.LoadBalancer: A loadbalancer service provides a way to expose a service externally using a cloud provider's load balancer. This type of service is typically used when an application needs to handle high traffic loads and requires automatic scaling and load balancing capabilties
+
+4.ExternalName: This is a similar object service to ClusterIp but it does have DNS (Name instead of Selectors and labesl. In other words, services wil be mapped toa DNS name you can view the Service YML file and see how to use this service
+
+
+
+Components Of Services:
+
+A service is defined using a k8s manifest file that describes its properties and specifications. Some of the key properties of a service include:
+
+Selector: A label selector that defines the set of pods that the service route traffic
+
+Port: The port number on which the servuce will listen for incoming traffic
+
+TargetPort: The port number on which the pods are listening for traffic
+
+Type: The type of service, such as ClusterIP, NodePort, LoadBalancer, or ExternalName
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+. mkdir manifest
+
+. cd manifest/
+
+. vim pod.yml
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-1
+  labels:
+    app: swiggy
+spec:
+  containers:
+  - name: cont-1
+    image: nginx
+    ports:
+    - containerPort: 80
+
+.kubectl create -f pod.yml
+
+.kubectl get po -o wide
+
+. vim service.yml
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kops
+spec:
+ type: ClusterIP
+ selector:
+   app: swiggy
+ports:
+  - port: 80
+    targetPort: 80
+
+. kubectl create -f service.yml
+
+. list of services: kubectl get svc
+
+
+go to remaining nodes and access the ip addr
+
+curl ipaddr
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kops
+spec:
+ type: ExternalName
+ externalName: flm.k8s.learnig.com
+ selector:
+   app: swiggy
+ports:
+  - port: 80
+    targetPort: 80
+
+. kubectl create -f service.yml
+. kubectl get svc
+
+go to remaining nodes and access the ip addr
+
+curl domainname[flm.k8s.learnig.com]
+
+curl http://flm.k8s.learnig.com
+
+. kops: kubectl get svc -o wide
+
+. kubectl describe svc kops
+
+. kubectl delete svc flm
+
+
+nodeport range: 30000 - 32767
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kops
+spec:
+ type: NodePort
+ selector:
+   app: swiggy
+ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30002[not assigned it assigns automatically]
+
+.kubectl create -f service.yml
+
+. kubectl delete svc svcname
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kops
+spec:
+ type: LoadBalancer
+ selector:
+   app: swiggy
+ports:
+  - port: 80
+    targetPort: 80
+
+.kubectl create -f service.yml

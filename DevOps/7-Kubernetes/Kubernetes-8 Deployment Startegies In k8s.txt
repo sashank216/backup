@@ -1,0 +1,288 @@
+
+Deployment Startegy In K8s
+
+WHat is deployment Strategy:
+
+These are the techniques which are used to manage the rollout and scaling of applications within a k8s cluster
+
+
+1. Canary Deployment
+
+2. Recreate Deployment
+
+3. Rolling update
+
+4. Blue-Green Deployment
+
+
+A. Canary Deployment
+
+A canary deployment involves rolling out a new version of your application to a subset of your pods or a percentage of your traffic to test it before deploying it to the entire application in production
+
+
+B. Recreate Deployment
+
+In this strategy the existing version of the application is terminated completely and a new version is deployed in its place. This approach is simple but may cause downtime during the update
+
+
+C. ROlling Update:
+
+Create new pods:
+
+It starts by creating a few pods of the new version
+
+
+Monitoring Pods
+
+It monitors the new pods to make sure they are healthy and working well
+
+
+Route traffic:
+
+If the new pods are working fine, k8s gradually increases their number whil reducing the old pods
+
+
+Delete the old Pods:
+
+This process continues until all pods are running the new version , and the old version has been phased out
+
+
+Deployment:
+
+vim deployment.yml
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: flm
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+       app: swiggy
+   template:
+     metadata:
+       labels:
+         app: swiggy
+      spec:
+        containers:
+        - name: cont-1
+          image: shaikmusatafa/cycle
+          ports: 
+          - containerPort: 80
+
+.kubectl create -f deployment.yml
+
+.kubectl get deployment
+
+.kubectl get rs [ replicaset will create]
+
+.kubectl get po
+
+.kubectl set image deployment/flm cont-1=shaikmusatfa/dm
+
+.kubectl get rs
+
+.kubectl delete deployment flm
+
+
+
+Now perform Rolling Update
+
+vim deployment.yml
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: flm
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+       app: swiggy
+   template:
+     metadata:
+       labels:
+         app: swiggy
+      spec:
+        containers:
+        - name: cont-1
+          image: shaikmusatafa/cycle
+          ports: 
+          - containerPort: 80
+      strategy:
+        type: RollingUpdate          
+        rollingUpdate:
+          maxSurge: 1               - how many new pods should be created
+          macUnavailable: 1         - how many pods could be deleted
+
+
+.kubectl create -f deployment.yml
+
+.kubectl get rs
+
+.kubectl get deployment
+
+.kubectl set image deployment/flm cont-1=shaikmusatfa/dm
+
+.kubectl get rs
+
+.kubectl delete deployment flm
+
+.Blue-Green Deployment Startegy:
+
+
+A blue/Green deployment is a way of accomplishing a zero-downtime upgrade to an exisiting application. The "blue" version is the currently running copy of the applucation and the "Green" version is the new version. Once the green version is ready. traffic is rerouted to the new version
+
+
+
+vim blue.yml
+
+Step:1 : Create Blue Deployment
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demoapp-blue
+  labels: 
+    app: demoapp
+    env: blue
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: demoapp
+      env: blue
+  template:
+    metadata:
+      labels:
+        app: demoapp
+        env: blue
+    spec:
+      containers:
+      - name: demo
+        image: nginx
+        ports:
+        - containerPort: 80
+
+
+
+vim green.yml
+
+Step:2 : Create Green deployment
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demoapp-blue
+  labels: 
+    app: demoapp
+    env: green
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: demoapp
+      env: green
+  template:
+    metadata:
+      labels:
+        app: demoapp
+        env: green
+    spec:
+      containers:
+      - name: demo
+        image: nginx
+        ports:
+        - containerPort: 80
+
+
+.kubectl create -f blue.yml
+
+.kubectl create -f green.yml
+
+
+
+
+vim service.yml
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-svc
+spec:
+  type: LoadBalancer
+  selector:
+    app: swiggy
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+
+.kubectl create -f service.yml
+
+.kubectl get svc
+
+
+
+
+Now change the image in the green yaml file as it is the latest version
+
+vim green.yml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demoapp-blue
+  labels: 
+    app: demoapp
+    env: green
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: demoapp
+      env: green
+  template:
+    metadata:
+      labels:
+        app: demoapp
+        env: green
+    spec:
+      containers:
+      - name: demo
+        image: shaimusatafa/cycle
+        ports:
+        - containerPort: 80
+
+
+.kubectl apply -f green.yml
+
+Change theservice.yml as it should not canary deployment and it should fully deploy in the version 
+
+
+vim service.yml
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-svc
+spec:
+  type: LoadBalancer
+  selector:
+    app: swiggy
+    env: green
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+
+.kubectl apply -f service.yml
+
+.kubectl get svc

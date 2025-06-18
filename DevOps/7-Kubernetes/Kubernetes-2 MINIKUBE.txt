@@ -1,0 +1,283 @@
+MINIKUBE:[not real time]
+
+.It is a tool used to setup single node cluster on k8's
+
+.It contains API servers, ETDC database and container runtime
+
+. It helps you to containerized applications
+
+. It is used for development, testing, and experimentaion purposes on local
+
+. Here master and worker runs on same machine
+
+. It is a platform independent
+
+. By default it will create one node only
+
+. Installing Minikube is simple compared to other tools
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+MINIKUBE SETUP:
+
+
+Requirements:
+
+. 2 CPUs or more
+. 2 GB of free memory
+. 20 GB of free disk space
+. Internet connection
+. Container or virtual machine manager, such as: Docker
+
+REDHAT:
+
+Install docker
+yum install docker -y
+systemctl start docker
+systemctl status docker
+
+
+
+Install MINIKUBE:
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+sudo yum install iptables -y
+yum install conntrack -y
+minikube start --driver=docker --force
+minikube status 
+
+
+Install KUBECTL:
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+sudo mv kubectl /usr/local/bin/kubectl
+sudo chmod +x /usr/local/bin/kubectl
+
+
+
+
+Ubuntu:
+
+
+#!/bin/bash
+
+UPDATE SERVER:
+1.apt update -y
+2.apt upgrade -y
+
+INSTALL DOCKER:
+3.sudo apt install curl wget apt-transport-https -y
+4.sudo curl -fsSL https://get.docker.com -o get-docker.sh
+another : apt install docker.io -y
+sudo sh get-docker.sh
+
+INSTALL MINIKUBE
+5.sudo curl -LO https://storage.googleapis.com/minikube/releases/latest/minikubelinux-amd64
+6.sudo mv minikube-linux-amd64 /usr/local/bin/minikube
+7.sudo chmod +x /usr/local/bin/minikube 
+8.sudo minikube version
+
+INSTALL KUBECTL:
+9.sudo curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+-> move the file: mv kubectl /usr/local/bin
+-> give permissions: chmod +x kubectl
+
+/10.sudo curl -LO "https://dl.k8s.io/$(curl -L -s /https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+/11.sudo echo "$(cat kubectl.sha256) kubectl" | sha256sum --check 
+/12.sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+/13.sudo kubectl version --client
+/14.sudo kubectl version --client --output=yaml  
+ 
+15.sudo minikube start --driver=docker --force
+
+-> minikube status
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+KUBECTL:
+
+. Kubectl is the CLI which is used to interact with k8s cluster.
+. We can create, manage pods, services, deployments, and other resources
+. We can also monitor, troubleshoot and perform scaling and updating the pods
+. To perform these tasks it communicates with the k8s api server
+. It has many options and commands to work on
+. The configuration of kubectl is in the $HOME/.kube directory
+
+Note:
+ K8s will not deploy the containers directly on worker nodes. K8s has a object called POD which containers containers
+
+Syntax:
+
+kubectl[command][TYPE][NAME][flags]
+
+kubectl api-resources: to list all api resources
+
+POD:
+
+. It is a smallest object that we can create in K8's
+. It is a group of containers
+. Pod acts like a single instance of our application
+. Pods are ephemeral (short living objects)
+. Mostly we can use single container inside a od bt if we required, we can create multiple containers inside a same pod
+. When we create a pod, containers inside pods can share the same network, namespace, and can share the same storage volumes
+. While creating pod, we must specify the image, along with any necessary configuration and resource limits
+. K8's cannot communicate with containers, they can communicate with only pods.
+
+. We can create this pod in two ways,
+ 
+ 1. Imperative(Command)
+ 2. Declarative (Manifest file)
+
+Single container POD
+
+     Container       Container
+  
+       Pod-1           Pod-2
+
+              Node-1
+
+Basically, each pod needsonly one container. But sometimes we need 2 containers in one pod
+
+
+Multi Container POD
+
+  App-cont      Helper-cont
+
+          Pod
+
+
+         Node
+
+Helper containers are additional containers included in a pod to perform some tasks that support the primary container which are running in the pod.
+
+
+How Helper container works:
+
+ . A helper container is used to collect the logs from the primary container.
+
+ . Helper containers can be used to run monitoring and metrics collection agents from the main application container
+
+. Helper containers can assist in syncing files or data between containers in a pod. For example, a pod might have a main application container and a helper conatiner responsible for syncing configuration files or other shared resources.
+
+. Security-related tasks, such as handling secrets, encryption, or authentication can be done by helper container
+
+
+POD CREATION:
+
+IMPERATIVE:
+
+
+The imperative way uses kubectl command to create pod. This method is useful for quickly creating and modifying the pods.
+
+SYNTAX: kubectl run pod_name --image=image_name
+COMMAND: kubectl run pod-1 --image=nginx
+
+kubectl: command line tool run: action
+pod1: name of pod
+nginx: name of image
+
+
+To see list of pods: kubectl get pods
+
+To create a pod: kubectl run myfirstpod --image=nginx
+
+.kubectl run secondpod --image=httpd
+
+.kubectl get pods , kubectl get pod , kubectl get po
+
+.kubectl delete pod myfirstpod
+
+Declaritive way:
+
+mkdir k8s
+
+cd k8s
+
+vim pod.yml
+
+---
+apiVersion: v1 [ to create objects]
+kind: Pod [what we are creating Resource]
+metadata:             [data about the object]
+  name: k8s-pod
+spec:  [pod's inside specifications]
+  containers:
+  - name: cont-1
+    image: nginx
+    ports:
+      - containerPort: 80
+
+
+---
+apiVersion: v1
+kind: Pod 
+metadata:             
+  name: k8s-pod
+spec:  
+  containers:
+  - name: cont-1
+    image: nginx
+    ports:
+      - containerPort: 80
+
+
+. kubectl create -f pod.yml
+
+. kubectl get pods
+
+. kubectl delete pods --all [delete all the pods]
+
+. kubectl delete pods pod-1 pod-2 pod-3 [ delete specific pods]
+
+
+existing files modifications: kubectl apply -f filename
+
+full information of a pod:  kubectl get po -o wide, kubectl get po -o json, kubectl get po -o yaml
+
+inspect the pod: kubectl describe pod k8s-pod
+
+to get inside the pod: kubectl exec -it  k8s-pod -c cont-1 bash
+
+logs of  pod: kubectl logs flm-pod
+
+container logs: kubectl logs flm-pod -c cont-1
+
+
+TO CREATE A POD USING COMMAND: kubectl ru pod-name --image=image_name
+
+TO SEE LIST OF PODS: kubectl get pods/ kubectl get pod/ kubectl get po
+
+TO SEE LIST OF PODS FULL INFO: kubectl get po -o wide
+
+TO SEE A PARTICUALR POD FULL INFO: kubectl get po pod-name -o wide
+
+TO SEE A PARTICUALR POD FULL INFO in JSON FORMAT: kubectl get po pod-name -o json
+
+TO SEE A PARTICUALR POD FULL INFO in YAML FORMAT: kubectl get po pod-name -o yaml
+
+TO DESCRIBE A POD: kubectl describe pod pod-name
+
+TO DESCRIBE ALL PODS: kubectl describe pod
+
+TO DELETE A POD: kubectl delete pod pod-name
+
+TO DELETE MULTIPLE PODS: kubectl delete pod pod-1 pod-2 pod-3
+
+TO DELETE ALL PODS: kubectl delete pod pod-name
+
+TO ENTER INTO A POD: kubectl exec -it pod_name -c cont_name bash
+
+TO GET POD LOGS: kubectl logs pod-name
+
+TO GET CONTAINER LOGS: kubectl logs pod-name -c cont-name
+
+
+
+
+
+
+
+
+
+
+

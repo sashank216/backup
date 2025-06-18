@@ -1,0 +1,53 @@
+
+OSI MODEL:
+
+It helps th understand journey of data across the internet in different layers
+
+OSI MODEL: 7 layers
+
+1. DNS resolution
+
+2. TCP handshake
+
+DNS: Domain Name System 
+
+Every router has record - Domain Name mapping with Ip addr
+
+Router verifies with local cache before making a request - not availble goes to internet service provider verifies particualr mapping [ here where complete records are available] 
+
+
+TCP handshake: 3-way handshake 
+
+               Laptop   ----------Sync------------> Server
+                        
+               Laptop  <----------Sync-Acknowledge---- Server
+                                                 
+               Laptop   -------------Acknowledge--------> Server
+
+
+ 2-way Handshake, 4-way Handshake
+  
+
+Layer 7(Application Layer) -> Use Http o https or browser asks for ftp based request you will raise -> Pass some headers ,Provide information for authentication
+
+Layer 6(Presentation) -> Once request is initiated by browser next step is data encryption/data Formating -> from system through server it goes to the different routers [ from home router -> internet service provider -> at last it goes to google server here we use https
+
+Layer 5(Session Layer) -> Browser should create a session -> Server doesnot ask for authentication for n number of times
+
+
+All these layers are maintained by browser
+
+
+layer 4(Transport Layer) -> Data which is send or received is segmented or split into parts and protocol is also defined TCP/UDP [for Http protocol is TCP {Transmit the data] , for DNS protcol is UDP]
+
+Send the data 
+
+Layer 3(Networking) -> Data is sent is received by router , we will add source ip addr as well as destination ip addr to each segment now we will call this as packets - this descision is given by router
+
+Layer 2(Data Link Layer) -> routers to switches ->Using switches data is convereted to frames - in this frames along with ip ect mac components also are added
+
+Layer 1(Physical Layer)  -> Routers, switches connected to optical cabels -> Language understood by optical cabels is electornic signals
+
+Receiver end: L1 to L7 in reverse order -> generate html page
+
+TCP -IP Model - L7 L6 L5 -> all are connected in one single layer

@@ -1,0 +1,161 @@
+Elasic Block Storage And Elastic File Storage
+
+
+
+File Storage       Host Computer       Block Storage
+
+
+. What is the type of your hard disk?
+ 
+ -> Block Storage
+
+
+. File Share 
+
+ -> File Storage
+
+
+Block Storage -- Hard Disks attached to computers - Can be connected to one virtual server
+                 Can connect multiple different block storage devices to one virtual server
+
+
+File Storage  -- Media  workflows need huge shared storage for suporting  processes like video editinhg
+
+                 Share files in a secure and organized way
+                   
+                 These file shared are shared by serval virtual servers
+
+
+.Block Storage: -> EBS, Instance Store
+
+Instance Store - Physical attached to ec2 instance, physical located on host computer
+-> Temporary data
+-> Lifecycle tied to ec2 instance(Only some support)
+-> Ephemeral Storage - Temporary
+-> Use Case: cache or scratch files
+
+ADV    - Very fast  no extra cost, ideal for temporary data
+DISADV - Slow boot up , ephemeral storage, cannot take a copy , size is fixed on instance type,  cannot detach and attach to another ec2 instance
+
+EBS -> Network Storage
+-> More durable
+-> Lifecyle not tied to ec2 instance
+-> Provisioned capacity - How big ebs user wants
+-> flexible - increase size whenever 
+-> independent from ec2
+-> 99.99999% availabilty and replicated within the same az
+-> use case: run your custom db
+
+Note: Cannot detach root volume
+
+Hard Disk Drive  vs Solid State Drive
+
+Performnace                     - HDD (Low)      SSD (High)
+Throughput(Big data use cases)  - HDD (High)     SSD(High)
+Great at                        - Large sequential I?) operations      Small , random I?O operations and sequenltial I?O
+Recommended for                 - Large streamng or big data workloads        Transactional workloads
+Cost                            - Low                                              Expensive
+Boot Volumes                    - Not Recommended                                    recommended
+
+
+
+
+.File Storage: -> EFS(Linux), FSx for windows,  Fsx for lustre ( high performance)
+
+EFS - Auto Scaling, Petabute Scale, Pay for use
+Use cases - Home directories, file share, content management
+
+FSc for lustre
+-> File system optimized for performance
+-> High performance computing (HPC) and media processing use cases
+-> Automatic encryption at-rest and in-transit
+
+
+. Alternative Amazon FSx windows file servers
+
+ -> FUlly managed windows file server
+ -> accessible from windows, linux and macos instances
+ -> Integrates with microsoft active directory (AD) to support windows-based
+    environments and enterprises
+ -> Automatic encryption at-rest and in-transit
+
+---------------------------------------------------------------------------------------------
+
+AWS Storage Gateway  - Hybrid Storage on on-premise
+
+. Hybrid  storage (Cloud + on premise)
+. Unlimited cloud storage for on-premise software applications and users with goof performance
+. Storage Gateway and S3 Galcier encrypt data by default
+
+. Three options
+ -> AWS Storage File Gateway
+ -> AWS Storage Tape Gateway
+ -> AWS Storage Volume Gateway
+
+. Problem Statement - Large on-pemise file share with terabytes of data
+----> Users put files into file share and applications
+----> Managing it is becoming expensive
+----> Move the file share to cloud without performance impact
+
+. AWS Storage File Gateway provides cloud storage for your file shares
+  
+----> Files stored in Amazon S3 and Galciers
+
+
+
+AWS Storage Tape Gateways
+
+. Tape backups used in enterpriese(archives)
+  -> Stored offsite - expensive, physical wear and tear
+
+. AWS Storage Tape Gateway - Avoid physical tape backups
+
+. No Change needed for tape backup infra
+
+. Backup data to virtual tpes ( actually, Amazon S3 and Glacier)
+
+AWS Storage Volume Gateway
+
+. Volume Gateway: Move block storage to cloud
+. Automate backup and disaster recovery
+. Use cases: bacup and disaster recovery, Migration of appliction data
+. (Option 1) cached ( gateway cached volumes):
+  -> Primary data Store - AWS - Amaozn S3
+  -> Om-premise cache stores frequenlt accessed data
+. (Option 2) stored ( gateway stored volumes);
+
+  -> Primary Data Store - On-premise
+  -> Asynchronous copy to AWS
+  -> Stored as EBS snapshots
+
+---------------------------------------------------------------
+
+Object Based Storage : S3
+File Based Storage : EFS
+Block level Storage : EBS
+
+
+S3: Application Configurations Cluster(Kubernetes) INFRA(Terraform Infra) WAR(Jenkins)
+EBS: Server Level Data  Store ( Files creates , tools store) everything in EBS
+EFS: From one server(files) to another server(replication)
+      
+
+EBS:   df -h command in ec2 ( Volume will be shown)
+      /dev/xvda - default path
+      /dev/xvdf - attach extra volume
+
+      fdisk  -l ( list of volumes  and list of block devices)
+
+
+   Data in EBS
+
+       EBS volume take a snapshot
+       Snapshot should be attached to new server
+       then the exisiting data in ebs volume will be moved to
+       another instance
+
+
+EFS: to install on ec2  command
+
+sudo yum install -y amazon-efs-utils
+       

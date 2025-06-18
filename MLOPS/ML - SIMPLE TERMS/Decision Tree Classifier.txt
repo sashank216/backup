@@ -1,0 +1,113 @@
+Machine Learning Algorithms
+
+1. Decision Tree Classifer
+
+a. Entropy and Gini Index -> Purity Split
+
+b. Information Gain -> feature decision tree split
+
+
+In decision tree take the features split them till there are no leaf nnodes
+
+
+1. Purity -> Pure Split ??
+
+             -> Entropy
+             -> Gini Impurity
+
+
+2. Information Gain --> How the features are selected
+
+ -> Entropy
+
+ -> Gini Impurity
+
+
+Entropy formula:
+
+H(S) = -p + log2 p + -p- log2 p-
+
+
+ex:        f1 -> 6yes/3no
+
+ (3y/3n)c1        c2 (3y/0n)
+
+
+
+How can we say that c2 is leaf node through mathemetics
+
+H(S) = -3/3 log2 3/3 - 0/3 log2 0/3
+
+     = -1 log2 1 = 0 => pure split
+
+H(c1) = - 3/6 log2(3/6) - 3/6 log2 (3/6)
+
+      = 1 => Impure Split
+
+
+
+Gini Impurity:
+           n
+G.I =  1  −∑ (pi)^2
+          i=1
+​
+ 
+
+G.I = 1 -((p+)^2 + (p-)^2)
+
+   = 1 -((1/2)^2 + (1/2)^2)
+
+   = 1 -1/2 = 0.5  
+
+
+G.I =  1-((1)^2 + 0) = 0
+
+
+
+Gini impurity ranges from 0 to 0.5
+
+In gini impurity maximum point it could reach is 0.5
+
+Entropy ranges from = 0 to 1
+
+
+Data set huge = Gini Impurity  otherwise use Entropy
+
+
+
+Information Gain:
+
+                    
+Gain(S,f1) =  H(S)−   ∑   |Sv|/|S|  H(Sv)
+                     i=1
+
+
+H(S) = -p + log2 p+ -p-log2 p-
+
+     = -9/14 log2 (9/14) - 5/14 log2 (5/14)
+
+     = 0.94
+
+H(c1) = -6/8 log2(6/8) - 2/8 log2 (2/8)
+      = 0.81
+
+H(c2) = 1
+
+
+
+Gain(S,f1) = 0.94 - [ 8/14 x 0.81 + 6/14 x 1]
+
+          = 0.049
+
+
+Gain(S,f2) = 0.052
+
+
+
+Post Prunning and Pre Prunning
+
+
+Overfitting -> Post Prunning [ Small Dataset]
+
+            -> Pre Prunning  [ Bigger Dataset]
+

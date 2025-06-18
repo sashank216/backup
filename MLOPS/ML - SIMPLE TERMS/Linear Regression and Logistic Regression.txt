@@ -1,0 +1,62 @@
+Machine Learning:
+
+Three Types:
+
+Supervised
+
+Unsupervised
+
+Reinforcment
+
+Supervised has two types:
+
+Classification,  Regression
+
+Classification: The data has a limit 
+
+Regression: The data of prediction is vast
+
+Linear Regrssion:
+
+Here it is used to predict the z(contiuous quantity), where we predict the depdendent variable (y) based on values of independent varibale (x)
+
+equation used: 
+
+Y (dependent varibale) =b0(Y intercept) + b1(slope) x(independent variable) + e (error)
+
+Y = b0 + b1x + e
+
+Logistic Regression:To solve classification problem
+
+Logistic Regression is a method used to predict a dependent variable, given a set of independent varibales , such that the dependent varibale is categorical
+
+
+In linear regression: Dependent variable is always continuous
+
+In logistic regression: dependent varibale is always categorical( can hold the values 1 or 0 binary), linear regression does not have this capability
+
+
+The resultant or the outcome is always continuous  in linear regression
+
+The resultant or the outcome is always binary in logistic regression
+
+equation:
+log(Y/1-Y) = C + B1X1 + B2X2 + .....
+
+. Y is the probability of an event to happen which you are trying to predict
+
+. x1, x2 are the independent varibales which determine the occurence of an event i.e Y
+
+. C is the constant term which will be the probabiltit of the event happening when no other facors are considered
+
+The curve in the logistic regression is called s curve or sigmoid curve
+
+
+Linear Regression Use Case:
+
+To forecast monthly sales by studying the relationships between the momthly e-commerce sales and the online advertising costs
+
+
+Logistic Regression Use Case:
+
+To predict if a student wil get admitted to a school based on his cgpa

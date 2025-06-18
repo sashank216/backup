@@ -1,0 +1,68 @@
+Virtual Private Cloud
+
+Defining the size of the vpc: By defining the ip addr range
+
+255 x 255 = 65536 ip addr to instances or application
+
+VPC -> has ip addr range or block
+
+It is attached with internet gateway
+
+
+Subnet: Splitting the ip addr to sub projects
+
+private subnet: No access to the internet
+
+public subnet: A user once access to the vpc
+
+public subnet is connected to the vpc using internet gateway
+
+
+Load Balancer: Where it sends the request according to the load
+
+Route table: how should the request go to the application
+
+Gateway: nobody without access to gateway to enter the vpc   
+
+Security Group : Allow the access the application
+
+
+If anyone is trying to enter the application private subnet first reach the internet gateway > public subnet > load balancer(request) > target group(attach the instance) > private subnet and application
+
+The lb to understand the path the Route table: defines the path
+
+Once the path is created > security group allows > private subnet
+
+NACL[Network Access Control List]: Automation of security group instead of giving the security grouo configurations everytime , nacl stores the security configuration and provides it[applied at the subnet level]
+
+NAT GATEWAY: If application in vpc tries to access the internet [without exposing the ip addr private subnet server or application
+
+VPC -> has ip addr range or block
+
+It is attached with internet gateway
+
+
+AWS Security Groups and NACL:
+
+AWS -> Shared Responsibility
+
+Security group servers in instance level
+
+Security Group -> Inbound and Outbound
+
+Difference between NACL and SG:
+
+In NACL the user can deny and allow the traffic rules
+
+In SECURITY GROUP the user can only allow the tarffic rules
+
+
+
+VPC:
+
+Create VPC
+
+VPC more -aws creates additional resources[public subnet and private subnet]
+route tables, internet gateway
+
+

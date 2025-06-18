@@ -1,0 +1,164 @@
+KOPS:
+
+To access the application in the pod we have to expose the pod first then we can access  the application and the application will be deployed
+
+WHY KOPS:
+
+KOPS --> INFRA
+k8s operation will automatically create Instances VPC LB ASG 
+
+
+Multi Node Cluster
+
+Manager Node
+Worker Node
+
+
+KOPS: Kubernetes Operation
+
+INSTANCE: Console -> Manual
+
+CLI = Instance
+
+Terraform = Instance
+
+Ansible = Instance
+
+CFT (Cloud Formation template) = Instance
+
+
+Infrastructure:
+
+Instances
+Networks(VPC)
+Databases
+Volumes
+ASG
+ELB
+
+
+. sudo -i
+
+Install aws cli:
+
+. curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+
+. unzip awscliv2.zip
+
+. cd aws/
+
+.  ./install
+
+. aws --version
+
+. cd
+
+.vim .bashrc
+
+. export PATH=$PATH:/usr/local/bin/
+
+. aws --version
+
+. source .bashrc
+
+Install KOPS & KUBECTL
+
+.curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+
+PERMISSIONS: chmod +x kubectl
+MOVE FILES:  mv kubectl /usr/local/bin/kubectl
+
+. kubectl version
+
+.wget https://github.com/kubernetes/kops/releases/download/v1.24.1/kops-linux-amd64
+
+PERMISSIONS: chmod +x kops-linux-amd64
+MOVE FILES:  mv kops-linux-amd64  /usr/local/bin/kops
+TO SEE VERSION: kops version
+
+STEP-4: CREATE IAM USER WITH ADMIN PERMISSIONS AND CONFIGURE IT IN ANY REGION WITH TABLE FORMAT[FULL ADMINSTARTION SERVICE]
+aws configure
+access key:
+secret key:
+default region Name:
+output: table format
+
+
+Simple Storage Service: S3: cluster information
+versioning:
+2 advantages
+
+1. accidental termination [recovery]
+2. we can maintain multiple versions of a same file
+
+CLI Syntax: PROVIDER RESOURCE COMMAND
+EX: AWS S3 S3 CREATE-BUCKET --BUCKET devopsbyvishnu
+
+
+STEP-5: CREATE INFRA SETUP
+		TO CREATE BUCKET: aws s3api create-bucket --bucket sashankvish.k8s.local  --region us-east-1
+		TO ENABLE VERSION: aws s3api put-bucket-versioning --bucket sashankvish.k8s.local  --region us-east-1 --versioning-configuration Status=Enabled
+		EXPORT CLUSTER DATA INTO BUCKET: export KOPS_STATE_STORE=s3://sashankvish.k8s.local
+		GENERATE-KEY: ssh-keygen
+		TO CREATE CLUSTER: kops create cluster --name vishnu.k8s.local --zones us-east-1a --master-size t2.medium --node-size t2.micro
+		TO SEE THE CLUSTER: kops get cluster
+		IF YOU WANT TO EDIT THE CLUSTER: kops edit cluster cluster_name
+		TO RUN THE CLUSTER: kops update cluster --name musta.k8s.local --yes --admin
+		TO DELETE THE CLUSTER: Kops delete cluster --name musta.k8s.local --yes
+STEP-6: CREATE PODS
+		TO CREATE A POD: kops update cluster --name musta.k8s.local --yes --admin
+		TO CHECK THE PODS: kubectl get pods
+		TO CHECK THE POD IS RUNNING WHERE:  kubectl get pods -o wide
+		TO CREATE A CONTIANER:
+
+* list clusters with: kops get cluster
+ * edit this cluster with: kops edit cluster musta.k8s.local
+ * edit your node instance group: kops edit ig --name=musta.k8s.local nodes-us-east-1a
+ * edit your master instance group: kops edit ig --name=musta.k8s.local master-us-east-1a
+
+Finally configure your cluster with: kops update cluster --name musta.k8s.local --yes --admin
+
+========================
+vim pod-nginx.yml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - image: nginx
+    name: nginx
+================
+		TO DELETE EXISTING POD: kubectl delete pod nginx
+		TO CREATE A POD: kubectl create -f pod-nginx.yml
+		TO DEPLOY POD: we need to delete existing pod (kubectl delete pod nginx) & write the code for deployment
+============================================================
+vim deployment-nginx.yml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: nginx
+  name: nginx-deploy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      run: nginx
+  template:
+    metadata:
+      labels:
+        run: nginx
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+======================================
+		TO DEPLOY IT: kubectl create -f deployment-nginx.yml --validate=false
+		TO DELETE THE WHOLE CLUSTER: kops delete cluster --name cluster_name --yes
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+

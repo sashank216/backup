@@ -1,0 +1,55 @@
+IAM: Identity and Access Management
+-> Authentication(the right user) and
+-> Authorization(the right acess)
+-> Root user: User we created our AWS account with
+  . Credntials: Email address and password
+  
+. Things we will do now:
+-> Create an IAM Group- Developers - with admin access
+-> Create an IAM user - sashank30  - with group Developers
+-> Login with IAM user - sashank30 - password: sashank30@
+Add user to group - it has the administrator access
+
+-----------------------------------------------------------------
+
+Regions and Zones
+
+ Application is deployed in data centre
+ 
+ Challenges: 
+  -> 1. Slow access for users from other parts of the world( high latency)
+  -> 2. If the data centre crashes
+          application goes down ( low availability)
+    
+     Solution: multiple data centres
+
+challenges: 
+ 1) Slow access for users from other parts of the world
+ 2) Region goes down
+
+Solution:
+
+Add multiple regions
+
+Challenges: Partly solved : Slow access for users from other parts of thr world
+-> You can solve this by adding deployments for you application in other regions in different parts of the world
+
+Advantage of Multiple Regions and zones:
+. Low Latency
+. Global Footprint
+. Adhere to govt regulations
+. High Availabilty
+
+---------------------------------------------------------------------
+
+Availabilty Zones
+
+. Each AWS regions consists of multiple, isolated, and physically separate AZs
+. Availabilty Zones in a region are connected through low-latency links
+. Each Availability Zone:
+-> Can have one or more discrete data centres
+-> has redundant power, networking and connectivity
+-> Increase availabilty and fault tolerance of application in the same region
+
+
+

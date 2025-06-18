@@ -1,0 +1,23 @@
+MLFLOW is the tracking server system
+
+Firstly Install MLFLOW - pip install mlflow
+
+Install favoured kernel - pip install ipykernel
+
+To launch the mlflow server- mlflow ui
+
+
+launch the get.started.ipynb - in the venv
+
+
+import mlflow
+
+mlflow.set_tracking_uri("http://127.0.0.1:5000")
+
+mflow.set_experminet("Check localhost connection")
+
+with mlflow.start_run():
+    mlflow.log_metric("task1", 1)
+    mlflow.log_metric("task2", 2)
+
+

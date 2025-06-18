@@ -1,0 +1,303 @@
+NAMESPACE:
+
+. Namespaces are used to group the components like pods, services and deployments
+
+. This can be useful for separating env such as development, staging, and production or for seprarting different teams or applications
+
+. In real time all the frontend pods are mapped to one namespace and backend pods are mapped to another namespace
+
+. It represents the cluster inside the cluster
+
+. You can have multiple namespaces within one k8s cluster and they are all logically isolated from one another
+
+. Namespaces provide a logical sepration of cluster resources between multiple users, teams, projects and even customer
+
+. Within the same Namespace, Pod to Pod communication
+
+. Namespaces provide a logical sepration between the environments(Dev, QA, Test, and Prod) with many users, or projects
+
+. Namespaces are only hidden from each other but are not fully isolated from each other
+
+. One service in a Namespace can talk to another service in another Namesspace if the target and sources are used with the full name which includes service/object name followed by Namespace
+
+. The name of resources within one namespace must be unique
+
+. When you delete a namespace all the resources will get deleted
+
+
+. kubectl get namespaces: To get the namespace
+
+. kubectl get ns
+
+  -> Default: when we create resources like pod, service, deployments all will get stored in default namespace
+
+  -> kube-public: The namespace for resources that are publicly available by all
+
+  -> kube-system: The namespace for object created by k8s
+
+  -> system.kube-node-lease: It is used for the lease objects associatedd with each node that improves the performance of the node heartbeats as the cluster scales
+
+
+. kubectl create ns dev
+
+. vim pod.yml
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-1
+  namespace: dev
+  labels:
+    app: swiggy
+
+spec:
+  containers:
+  - name: cont-1
+    image: nginx
+    ports:
+    - containerPort: 80
+
+.kubectl create -f pod.yml
+
+.kubectl get po
+
+.kubectl get po -n dev
+
+vim service.yml
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-svc
+  namespace: dev
+spec:
+  type: ClusterIP
+  selector:
+    app: swiggy
+  ports:
+  - port: 80
+    targetPort: 80
+
+. kubectl create -f svc.yml
+
+.kubectl get svc -n dev
+
+. kubectl create ns test
+
+. kubectl config set-context --current --namespace=test
+
+. kubectl config view --minify | grep namespace
+
+. vim one.yml
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-1
+  labels:
+    app: swiggy
+
+spec:
+  containers:
+  - name: cont-1
+    image: nginx
+    ports:
+    - containerPort: 80
+
+
+.kubectl create -f pod.yml
+
+. kubectl get po
+
+. kubectl config set-context --current --namespace=default
+
+. kubectl get po
+
+. kubectl delete ns dev
+
+
+vim service.yml
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: swiggy
+  ports:
+  - port: 80
+    targetPort: 80
+
+. kubectl create -f svc.yml -n test
+
+. kubectl get svc -n test
+
+Namespace can be created in two ways:
+
+Imperative and declartive way
+
+. Dev namespace or Production namespaces wanted see list of deployments
+
+. kubectl get deployment -n dev
+
+. kubectl get deployment -n production
+
+---------------------------------------------
+
+. kubectl create ns blue-green-deployment
+
+. vim blue.yml
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flm-1
+  labels:
+    app: swiggy
+    env: blue
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: swiggy
+      env: blue
+  template:
+    metadata:
+      labels:
+        app: swiggy
+        env: blue
+    spec:
+      containers:
+      - name: cont-1
+        image: shaikmusatafa/cycle
+        ports:
+        - containerPort: 80
+
+
+cp blue.yml green.yml
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flm-2
+  labels:
+    app: swiggy
+    env: green
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: swiggy
+      env: green
+  template:
+    metadata:
+      labels:
+        app: swiggy
+        env: green
+    spec:
+      containers:
+      - name: cont-1
+        image: shaikmusatafa/cycle
+        ports:
+        - containerPort: 80
+
+
+vim service.yml
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-svc
+spec:
+  type: LoadBalancer
+  selector:
+    app: swiggy
+  ports:
+  - port: 80
+    targetPort: 80
+
+
+if a yaml file should be deployed in the particular namespace 
+they are three namespaces:
+
+either mention namespace in yaml file
+
+or move to that namespace
+
+or mention in the command while creating manifest file means runtime
+
+
+.kubectl config set-context --current --namespace=blue-green-deployment
+
+. kubectl config view --minify | grep namespace
+
+. kubectl create -f blue.yml
+
+. kubectl create -f green.yml
+
+. kubectl get deployment
+
+. kubectl create -f svc.yml
+
+. kubectl get svc
+
+
+. vim green.yml
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flm-2
+  labels:
+    app: swiggy
+    env: green
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: swiggy
+      env: green
+  template:
+    metadata:
+      labels:
+        app: swiggy
+        env: green
+    spec:
+      containers:
+      - name: cont-1
+        image: shaikmusatafa/cycle
+        ports:
+        - containerPort: 80
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-svc
+spec:
+  type: LoadBalancer
+  selector:
+    app: swiggy
+    env: green
+  ports:
+  - port: 80
+    targetPort: 80
+
+
+kubectl apply -f green.yml
+
+kubectl apply service.yml

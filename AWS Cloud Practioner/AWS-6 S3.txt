@@ -1,0 +1,122 @@
+Amazon S3 ( Simple Storage Service )
+
+. Flexible
+. Store large objects using a key-value approach
+. Also called Object Storage
+. Provides REST API to access and modify objects
+
+. Provides unlimited storage:
+   -> Storage class 99.99% availaility & 11 9's (99999999999)durabiltiy
+   -> Objects are replicated in single region ( across multiple AZs)
+
+. Store all file types - text, binary, bakcup & archives:
+ -> Media files and archives
+ -> Application packages and logs
+ -> Backups of your databases or storage devices
+ -> Staging data during on-premise to cloud database migration
+
+
+Buckets:  If you create a root level folder then it is called as Buckets
+Buckets:  Used to store the objects(file, folder etc)
+Buckets:  Ownership cannot be transfered
+Buckets:  Names cannot be changed or change
+Buckets: Directly cannot be deleted , we have to clear the objects
+By default 100 buckets can be created in AWS account
+
+
+Objects: Data(files or anything) store in the bucket is called Objects
+
+S3 Versioning:
+
+. retrive the data even if the file is lost
+. maintain multiple versions of the same file
+.  retrive previous versions of the object
+. Only suspend no delete
+
+ACL enable and disable - Public and private
+
+
+Cross Region Replication:  One bucket(client) data will be uploaded to another bucket
+                            Only update no delete
+
+Bucket to bucket object transfer  the permissions will be provided by IAM
+
+. Scalable storage in the cloud
+------------------------------------------------------------------------------
+
+
+Object Based Storage : S3 -> Cluster,Infra,WAR
+File Based Storage : EFS -> Files Replication from one server to another
+Block Level Storage : EBS -> Server Level Files and Tools
+
+.S3 -> Global -> No regions
+
+.Bucket ->  Specific region
+
+. Objects are stored in buckets
+ 
+ -> Bucket names are globally unique
+ -> unlimited objects in a bucket
+
+. Each object is identified by a key value pair
+ 
+ -> Key s unique in a bucket
+ -> Max object size is 5TB
+
+------------------------------------------------------------------------
+
+S3 Storage Classes
+
+. Different kinds of data
+
+ -> Medi files and archives
+ -> Applications , backups of db etc.
+
+. Huge variations in access patterns
+
+. Trade-off b/w access time and cost
+
+. S3 storage classes help to optimize your costs while meeting access time needs
+
+
+Storage classes
+
+. Standard               Frequently accessed data
+. Standard -1A           long-lived , infrequenlt accessed data ( backups for ddistater recovery)
+. One zone-1A            long-lived , indrequnelt accessed , non-critical data ( easily re creatable data -thumbnails for images)
+. Intelligent- Tiering   Long-lived data with chaning or unknown access patterns
+. Glacier                Archive data with reteival times ranging from inutes to hours
+. Glacier deep Archive   Archive data that rarely, if ever , needs to be accessed with retrieval times in hours
+
+
+-----------------------------------------------------------------------------
+
+Amazon S3 Glacier
+
+.  S3 Glacier - Storage class  - Separat AWS service on its won
+
+. Extremely low cost for archives and long-term backups:
+ 
+  -> Old media content
+  -> Archives to meet regulatory requirements( old patent records ect)
+  -> As a replacement for magnetic tapes
+
+. High durability, scalibility, security(encrypted at rest and in transfer
+
+
+Amazon                S3                                                        S3 Galcier
+
+Termninology          Objects(files) are stored in Buckets(containers)          Archives(files) are stored in Vaults(containers)
+ 
+Keys                  Objects keys are user defined                             Archive keys are system generated identifiers
+
+Mutability            (Default) Allows uplaoding new content to                 After an archive is created, it cannot be updated (Perfect for regulatory compilance)
+
+                       object
+
+Max size               Each object can be upto 5Tb                              Each archive can be upto 40TB
+
+
+Encryption             Optional                                                 Mandatory
+
+

@@ -1,0 +1,151 @@
+sudo -i
+
+vim minikube.sh
+
+copy paste url links
+
+sh minikube.sh
+
+
+LABELS, SELECTORS AND NODE SELECTORS:
+
+LABELS:
+
+. Labesl are used to organize k8s objects such as pods , nodes , etc
+
+. You can add multiple labels over k8s objects
+
+. Labels are defined in key-value pairs
+
+. Labels are similar o tags in AWS or AZURE where you give a name to filter the resources quickly
+
+. You can add labels like environment, department or anything else acc to you
+
+
+Label-Selectors:
+
+. Once the labels are attached to the k8s objects those objects will be filtered out with the help of labels-selectors known as selectors
+
+. The API currently supports two types of label-selectors equality based ans set-based. Label selectors can be made of multiple selectors that are comma-separated.
+
+
+Node Selector:
+
+Node Selector means selecting the nodes. Node selector is used to choose the node to apply a particualr command
+
+
+This is done by labels where in the manifest file, we mentioned the node label name while running the manifest file master nodes find the node that has the same label and create the pod on that container
+
+Make sure that the node must have the label. if the node doesnot have any label then, the manifest file will jump to the next node
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+vim pod.yml
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+   name: pod-1
+   labels:
+      env: testing
+      department: DevOps
+      project: swiggy
+spec:
+  containers:
+    - name: cont-1
+      image: nginx
+      ports:
+       - containerPort: 80
+
+. kubectl create -f pod.yml
+
+. kubectl get po
+
+. kubectl get po --show-labels
+
+. mkdir manifest
+
+. mv pod.yml manifest/
+
+. cp pod.yml podduplicate.yml
+
+. vim podduplicate.yml
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+   name: pod-2
+   labels:
+      env: dev
+      department: DevOps
+      project: swiggy
+spec:
+  containers:
+    - name: cont-1
+      image: nginx
+      ports:
+       - containerPort: 80
+
+. kubectl create -f pod.yml
+
+. kubectl get po
+
+. kubectl get po --show-labels
+
+Equality based selector:
+
+. kubectl get po -l env=testing
+
+. kubectl get po -l env=dev
+
+. kubectl get po -l project=swiggy
+
+. kubectl get po -l project!=swiggy
+
+. kubectl describe pod pod.yml
+
+. vim pod.yml
+
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+   name: pod-2
+   labels:
+      env: testing
+      department: DevOps
+      project: swiggy
+      name: aws
+spec:
+  containers:
+    - name: cont-1
+      image: nginx
+      ports:
+       - containerPort: 80
+
+. kubectl apply -f pod.yml
+
+. kubectl get po --show-labels
+
+. kubectl label pods pod-2 name=azure
+
+- Set based selector
+
+. kubectl get pods -l 'env in (testing, dev)'
+
+. kubectl get pods -l 'env notin (testing, dev)'
+
+
+
+
+
+
+
+
+
+
+
+
+

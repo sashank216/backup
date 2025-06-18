@@ -1,0 +1,82 @@
+
+MLFLOW:
+
+1. Core Components of MLflow
+
+2. Why use Mlflow
+
+3. Who used Mlflow
+
+4. Usecase of Mlflow
+
+
+Lifecycle of Data Science project
+
+
+0. Data Preparation  - creating etl pipelines aggregate data from db etc and store in db[mongo db]
+
+1. Exploratory Data Analysis - Analyze the data , perform high level testing , statistical analysis
+
+2. Feature Engineering - handle the missing values, need to check how many categorical variables is there etc...
+
+3. Model Training - Data Scientists are involved
+
+4. Model Validation - FUnctionality overlap with ml engineers and data scientists
+
+5. Deployment - ml engineers for extensive deploymeny
+
+6. Monitoring - Implement data drift , like model needs to be retrained
+
+
+Data Scientists Leverage MLflow for:
+
+1. Experiment Tracking and hypothesis testing
+
+2. Code Structuring 
+
+3. Model Packaging and dependency management
+
+4. Evaluvating Hyperparameter tuning --> Train Model --> parameters
+
+                                      --> Tracks Hyperparameter Tuning
+                                            
+                                         ---> Visualization Graphs
+
+
+5. Compare the results of models retraining over time
+
+
+MLOPS Professional:
+
+1. Manage the lifecylce of Trained Models both pre and post deployment
+
+2. Deploy models securily to the production environment
+
+3. Manage the entire deployment dependency
+
+
+Prompt Engineers Users:
+
+1. Evaluate and exp with large language models
+
+2. Create custom prompts and expermient 
+
+3. Deciding on the best base model suitable for project requirement.
+
+
+Usecases:
+
+1. Experminet Tracking -> Trac parameters and metrics -> UI ->
+
+2. Model Selectin and deployment
+
+3. Model Performance Monitoring
+
+4. Collaborative Project
+
+
+We can use the MLFLOW from Model Training ---> Accuracy, Error, Training, Test
+
+
+Best Model UI from Accuracy  ->  Deploy it
+

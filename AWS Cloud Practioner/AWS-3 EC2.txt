@@ -1,0 +1,106 @@
+EC2 (Elastic Compute Cloud)
+
+.EC2 instances - Virtual servers in AWS
+
+.EC2 service - Provision EC2 instances or virtual servers
+
+.Create and manage lifecycle of EC2 instances
+
+.Attach storage( & network storage) to your EC2 instances
+
+.Manage network connectivity for an EC2 instance
+
+.Load balancing and auto scaling for multiple EC2 instances
+
+key pair 
+-> Public key -> By aws
+-> Private Key -> By us
+
+Private key -> to launch the instance
+
+EC2 instance connect works on only specific browsers
+
+echo "HELLo WORLD" > /var/www/html/index.html
+
+------------------------------------------------------------------
+
+EC2 Concepts AMI - Amazon Machine IMAGE
+
+The Operating system and the software for the instance important for the applications
+
+Three AMI sources:
+-> Provided by AWS
+-> AWS Market Place
+-> Customized AMIs: Created by user
+
+-------------------------------------------------------------------
+
+EC2 instance family: Optimized combination of compute(CPU, GPU), memory, disk(storage) and networking for specific  workloads
+
+Instance type:
+
+.. m (m4,m5,m6) - General Purpose
+.. c (c4, c5, c5n) - Compute Optimized
+.. r ( r4c, r5, r5a, r5n) - Memory (RAM) optimized
+.. i(i3) - STorage (I/O) optimized
+.. g(g3, g4) - GPU Optimize - Graphics Processing
+
+
+------------------------------------------------------------------
+
+EC2 Important Concepts - Security Group
+
+. Virtual firewall to control incoming and outgoing traffic to/from AWS resources (EC2 instances, databases etc)
+
+. Providing additional layer of security - Defense in Depth
+
+. Default Deny - if there are no rules configured , no outbound/inbound traffic is alloed
+
+. Allows allow rules ONLY
+
+. Seprate rules for inbound and outbound traffic
+
+-------------------------------------------------------------------
+
+EC2 key pairs
+
+. EC2 uses public key cryptography for protecting login credentials
+. Key pair - public key and a private key
+-> Public key is stored in EC2 instance
+-> Private key is stored by the customer/user
+
+-------------------------------------------------------------------
+
+EC2 Storage devices - Elastic Block Storage - associated with hard disk of this type
+
+Monitoring - User can see the metrics - All the metrics are coming in because of the cloud watch
+
+Cloudwatch - It is the monitoring service
+
+----------------------------------------------------------------------
+
+EC2 IP Addresses
+
+. Public IP addresses are internet addressable
+. Private IP addresses are internal to a corporate
+. You cannot have two resources with same public IP address
+. However , two different corporate networks can have resources
+can have resources with same private IP address
+. All EC2 instances are assigned private IP addresses
+. EC2 stop = public ip address is lost
+
+---------------------------------------------------------------------------------------
+
+Elastic IP Addresses
+
+. Scenario: How do you get a constant public IP address for a EC2 instance
+-> Quick and dirty way is to use an Elastic IP!
+
+.Elastic IP can be switched to another EC2 instance within the same region
+
+. Elastic IP remains attached even if you stop the instance. You have to manually detach it.
+
+. Elastic IP remains attached even if you stop the instance. You have to manually detach it.
+
+. Remember: You are charged for an Elastic IP when you are NOT using it! 
+            Make sure that you explicitly release an Elastic IP when  you are not using it.

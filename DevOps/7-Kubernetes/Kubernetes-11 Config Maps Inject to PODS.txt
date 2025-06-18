@@ -1,0 +1,35 @@
+
+K8s Config Maps inject to Pods:
+
+
+.kubectl create cm one --from-literal=Name=Vishnu --from -literal=Place=Hyd
+
+. kubectl get cm
+
+. kubectl describe cm one
+
+.vim pod.yml
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-1
+spec:
+  containers:
+    - name: cont1
+      image: nginx
+      env:
+        - name: my-env
+          valueFrom:
+            configMapRef:
+              key: Name
+              name: one
+
+.kubectl create -f pod.yml
+
+. kubectl get po
+
+. kubectl exec -it pod pod-1
+
+

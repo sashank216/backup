@@ -1,0 +1,209 @@
+.mkdir manifest
+
+. cd manifest
+
+.vim pod.yml
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-1
+  labels:
+     app: swiggy
+spec:
+  containers:
+  - name: cont-1
+    image: shaikmusatafa/cycle
+    ports:
+    - containerPort: 80
+
+.kubectl create -f pod.yml
+
+
+.vim service.yml
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  type: NodePort
+  selector:
+    app: swiggy
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30005
+
+
+.kubectl create -f service.yml
+
+.kubectl get pod -o wide
+
+.kubectl get svc
+
+.kubectl delete pod pod-1
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+REPLICAS IN K8S:
+
+.Before k8s, other tools did not provide important and customized features like scaling and replications
+
+. When k8s was introduced, replication and scaling were the premium features that increased the popularity of this container orchestration tools
+
+. Replication means that if the pod's desired state is set to 3 ad whenever any pod fans, then with the help of replication, the new pod will be created as soon as possible. This will lead to a reduction in the downtime of the application.
+
+. Scaling means if the load becomes increases on the application, then k8s increases the number of pods according to the load on the application
+
+
+. ReplicationController is an object in k8s that was introduced in v1 of k8s which helps to meet the desired state of the k8s cluster from the current state. ReplicationController works on equality-based controllers only
+
+
+. ReplicaSet is an object in k8s and it is an advanced version of ReplicationController. ReplicaSet works on both equality-based controllers and set-based controllers
+
+
+Replication Controller:
+
+. Replication controller can run specific number of pods as per our requirement.
+
+. It has the responsible for managing the pod lifecycle
+
+. It will make sure that always pods are up and running
+
+. If there are too many pods, Rc will terminate the extra pods
+
+. If there are too less RC will create new pods
+
+. This Replication controller will have self-healing capability, that means it will create automatically
+
+. If a pod is failed, terminated or deleted then new pod will get created automatically. Replication controllers use labels to identify the pods that they are managing
+
+. We need to specify the desired number of replicas in YAML file
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+vim rc.yml
+
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: my-rc
+spec:                                [object spec][replication spec][kind spec]
+  replicas: 3
+  selector:
+    app: kops
+  template:
+    metadata:          -----> POD template
+      labels:
+        app: kops
+    spec:
+      containers:
+      - name: cont-1
+        image: shaikmustafa/cycle
+        ports: 
+        - containersPort: 80
+
+.kubectl create -f rc.yml
+
+.kubectl get po -o wide
+
+.kubectl delete -f service.yml
+
+
+.vim service.yml
+
+---
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  type: NodePort
+  selector:
+    app: kops
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30005
+
+.kubectl create -f service.yml
+
+.kubectl delete pod podname
+
+. kubectl get rc
+
+. kubectl get rc -o wide
+
+. kubectl describe rc rcname
+
+. kubectl scale rc my-rc --replicas 5 - through command scale up
+
+. kubectl scale rc my-rc --replicas 2 - through command scale down
+
+. kubectl delete rc my-rc - deleted pod permanently
+
+
+Even though replication is deleted the pods should not be deleted
+
+. kubectl delete rc my-rc --cascade=orphan
+
+. kubectl get po
+
+. kubectl delete pod --all
+
+
+ReplicaSet:
+
+vim rs.yml
+
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: my-rs
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: kops
+  template:
+    metadata:
+      labels:
+        app: kops
+    spec:
+      containers:
+      - name: cont-1
+        image: shaikmustafa/cycle
+        ports:
+        - containerPort: 80
+
+
+.kubectl create -f rs.yml
+
+. kubectl get rs
+
+. kubectl get pods
+
+
+
+.vim service.yml
+
+---
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  type: NodePort
+  selector:
+    app: kops
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30007

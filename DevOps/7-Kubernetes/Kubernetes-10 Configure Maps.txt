@@ -1,0 +1,196 @@
+CONFIG MAPS:
+
+. ConfigMap is used to store the configuration data in key-value pairs within K8s 
+
+. But the data should be non confidential data
+
+. To store the secrets or confidential data we store in secrets file
+
+. This is one of the ways to decouple the configuration from the application to get rid of hardcoded values
+
+. Also, if you observe some important values keep changing according to the env such as development, testing, production, etc ConfigMap helps to fix this issue to decouple the configuration
+
+. So we can set the configuration of data of application separately
+
+. But it does not provide security and encryption. If we want to provide encryption use secrets in k8s
+
+. Limit of config map data in only 1MB( we cannot store more than that)
+
+. But if we want to store a large amount of data in config maps we have to mount a volume or use a separate database or file service
+
+
+
+Use Cases in CONFIG MAPS:
+
+. Configure application settings: By using this config maps, we can store the configuration data that helps to run our application like db connections and envieronment variables
+
+. Configuration a pod or container: It is used to send a configuration data to a pod or container at runtime like CLI or files
+
+. Sharing configuration data across multiple resources: By using this configuration data multiple resources can access, such as a company configuration a file for different pods or services
+
+. We can store the data: By using this config maps, we can store the data like IP address, URL's and DNS etc...
+
+
+
+Some points about configmaps:
+
+.  Creating the configMap is the first process which can be done by commands only or a YAML file
+
+. After creating the configMap, we can use the data in the pod by injecting the pods
+
+. After injecting the pods, if there is any update in the configuration we can modify the configMap, and the changes will be reflected in the injected pod
+
+
+Creating ConfigMAp fromliteral:
+
+We have created the configMap through - from-literal which means you just need to provide the key value instead of providing the file with key-value pair data
+
+
+Kubectl create cm my-first-cm --from-literal=Course=DevOps --from-literal=Cloud=AWS --from-literal=TRainer=Mustafa
+
+To get Config Maps: kubectl get cm
+To describe: Kubectl describe configmap/configmap-name
+To delet: kubectl delete configmap/configmap
+
+
+
+
+
+
+.vim mini.sh
+
+.sh mini.sh
+
+
+Imperative way:
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+.kubectl get cm
+
+.kubectl create cm myfirstcm --from-literal=Course=Devops --from-literal=Cloud=AWS --from-literal=Trainer=Vishnu
+
+. kubectl get cm
+
+. kubectl describe cm
+
+. vim myfile
+
+Name=Sashank
+Subject=Devops
+Place=Hyd
+
+.Kubectl create cm vishnu --from-file=myfile
+
+. kubectl get cm
+
+. kubectl describe cm vishnu
+
+. vim mvs.env
+
+Tool=Kubernetes
+Topic=ConfigMaps
+Course=Devops
+
+. kubectl create cm mvs --from-env-file=mvs.env
+
+. kubectl describe cm mvs
+
+. cd .
+
+. mdir flm
+
+. cd flm/
+
+. touch file{1..5}
+
+. ll
+
+. vim file1
+
+Company=TCS
+Loc=Hyd
+Designation=Devops
+
+.cp file1 file2
+
+. cp file2 file3
+
+. cp file 3 file4
+
+. cp file4 file5
+
+. cd.
+
+. kubectl create cm vms --from-file=flm
+
+.kubectl get cm
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Delcaritive way:
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aws
+data:
+  DATABASE_URL: "https://example.db.com
+  API_KEY: "my-api-key"
+
+.kubectl create -f one.yml
+
+.kubectl get cm
+
+. kubectl delet cm vishnu sashank mvs aws flm
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Inject CM into the pod with specific key pairs:
+
+. We have created four types of configMaps but here, we will learn how to use those    configMaps by injecting configMaps into the pods.
+
+. Create a file for pod and execute it inside the pod.yml we have to declare any valuefrom our configmap
+
+. After creating the pod, enter into the pod using kubectl exec -it pod_name/bin/bash Once you entered into pod give a command env that will print list of envs
+
+
+->
+
+. kubectl create cm one --from-literal=Devops, --from-literal=Cloud=AWS
+
+. kubectl get cm mvs
+
+. kubectl describe cm mvs
+
+.vim pod.yml
+
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-1
+spec:
+  containers:
+  - image: nginx
+    name: cont-1
+    env:
+      - name: FirstValue
+        valueFrom:
+          configMapKeyRef:
+            key: Name
+            name: one
+
+.kubectl create -f pod.yml
+
+. kubectl get po
+
+. kubectl exec -it pod-1 /bin/bash
+
+. env
+

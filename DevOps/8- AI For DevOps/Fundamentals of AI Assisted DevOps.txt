@@ -1,0 +1,93 @@
+
+.GEN AI
+
+.TRADATIONAL AI
+
+.USE CASES
+
+.LLM
+
+.PROMPT
+
+.AI LANDSCAPE
+
+
+Traditional AI: Primary Use Case: Predict the events
+
+Generative AI: Primary Use Case: Generate the Content - Generate the text, Generate Videos, Generate Images
+
+Trained with various and vast amount of data
+
+Using GPT transforms generates complete new content(example image)
+
+
+Text Generating AI Models: LLM(Large Language Models) 
+
+
+In Terms of DevOps:
+
+Traditional AI: Predict future events and identify patterns in incident management [In obeservibiltiy and incident managements] and report any incidents that can occur in future
+
+
+AWS Auto Scaling: They have predicting auto scaling - done with tradational ai p they have predicted matrix]
+
+
+Gen AI: If we ask for k8s manifest , the gen ai is completely fed with large amount of data , once it is asked for a new manifest as it is trained with large sets of data it provides the manifest file
+
+How LLMS are so powerful: llama :407b [ trained on 407 billion parameters]
+--> supercomputer -> Huge amount of gpus and tpus - so they have paralller computing
+
+Tradational AI + Gen AI= AIOPS became powerful
+
+
+
+Prompt Engineering: Communicate with LLM 
+
+DevOps Landscape
+
+Linux, Git[GitHub],gitlab, bitbucket ci/cdjenkins, Terraform, Docker, K8s, Ansible, Python
+
+
+AI Landscape for DevOps:
+
+AI chatbots:
+
+claud, Chatgpt, llama, deepseek
+
+
+AI Agents:
+
+GitHub copilot workspace
+
+bolt.new
+
+
+AI Assistants:
+
+GitHub copilot workspace
+
+Pieces for Developers
+
+Curser.ai 
+
+
+Programming language:
+
+Python
+
+FastAPI[GEN AI]
+
+Flask
+
+Jmbo
+
+
+
+Task: Create a github repo, this repo should have shell script where the shell script should monitor the state of the virtual machine 
+
+When you execute shell script ec2 instance , it needs to look at matrix
+of vm like cpu memory should say whethere it is healthy or not healthy
+over 60% not healthy below 60 healty
+
+Pass command line : explain [./health.sh explain] - why it is not healthy or not healthy
+

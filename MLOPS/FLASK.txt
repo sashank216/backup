@@ -1,0 +1,88 @@
+FLASK FRAMEWORK:
+
+1. WSGI -> Web Server Gateway Intergface
+
+2. Jinja 2 -> Template Engine
+
+Flask : Complete web framewor which is created with the help of python programming language
+
+WSGI is a bridge between your Python code (like Flask) and the web server (like Apache, Nginx, or AWS EC2).
+
+Web servers don’t know how to run Python code directly.
+
+Your Flask app is Python code.
+
+WSGI is like a translator that lets the web server talk to your Flask app.
+
+Web Server - could be in aws ec2 azure apache gcp , iis
+
+
+ What is WSGI (Web Server Gateway Interface)?
+WSGI is a bridge between your Python code (like Flask) and the web server (like Apache, Nginx, or AWS EC2).
+
+🔧 Why Do We Need WSGI?
+Web servers don’t know how to run Python code directly.
+
+Your Flask app is Python code.
+
+WSGI is like a translator that lets the web server talk to your Flask app.
+
+🧠 Think of It Like This:
+Imagine a restaurant:
+
+You (the customer) = Web browser
+
+Waiter = WSGI
+
+Chef = Flask App
+
+Kitchen = Server
+
+When a customer orders food (a request), the waiter (WSGI) takes it to the chef (Flask app), gets the response (the dish), and brings it back to the customer.
+
+🧩 How It Works in Practice
+When you deploy your Flask app:
+
+The user sends a request (via browser).
+
+The web server (like Gunicorn or uWSGI) receives the request.
+
+WSGI passes that request to Flask.
+
+Flask processes it and returns a response.
+
+WSGI sends the response back through the server to the user.
+
+✅ WSGI Servers Commonly Used with Flask:
+Gunicorn
+
+uWSGI
+
+mod_wsgi (for Apache)
+
+These servers implement WSGI and run your Flask app in production.
+
+📝 Summary
+Component	      Role
+Flask App	     Python web application logic
+WSGI	             Interface/translator
+Web Server	     Handles HTTP requests (e.g., Apache, Nginx, Gunicorn)
+Browser	             Sends requests, gets responses
+
+
+2. Jinja 2 Template Engine:
+
+Jinja 2: It is a web template engine
+
+         It combines a web templates with a data source
+
+         Data Source: COuld be sql data , csv sheet, Ml model, mongo db
+
+
+Example: Creating Dynamic Web Pages
+
+
+Overall of Jinja 2 : Which will take layout and integrate with the data scource so that we could create dynamic webpages
+
+
+

@@ -1,0 +1,88 @@
+Networking Fundamentals:
+
+IP Address:
+
+It is used to generate unique address to the device 
+
+Generating unique address for the device standard ipv4 is used
+
+172.16.3.4
+
+0-255 range   ipv4
+
+
+0-255 * 0-255 * 0-255 * 0-255
+
+bits
+
+byte -> 8 bits  -> 4 bytes (or) 32 bits 
+
+4 bytes = 4 dots [ . [0-255] ]
+
+4 bytes = 4 dots [ . [0-255] ]
+
+4 bytes = 4 dots [ . [0-255] ]
+
+4 bytes = 4 dots [ . [0-255] ] 
+
+172.32.16.1
+
+
+2^0 -1 2^1 - 2  2^2 - 4  2^3 - 8  2^4 - 16  2^5 - 32   2^6 - 64  2^7 - 128
+
+
+- - - - - - - - 2^5 + 2^7
+
+- - - - - - - - 2^5
+
+- - - - - - - - 2^4
+
+- - - - - - - - 2^0
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Subnet:
+
+EX:Creating vpc on aws or openstack
+
+   Requesting network provider - 65k ip addrs
+
+   Max would connect - 40k
+
+If a user gets access to wifi and he is using and if he unfortunately gets into  malicisious account and once hacker gets into it and he gets into the other ip addr and hacks the data
+
+
+To avoid this:
+
+Subnetworking: Split into 2 parts  network -1 [ secure network [personal info] ]
+
+                                   network -2 [ free network ]
+
+even a hacker gets into the network account he doesnot get the access of secure network
+
+
+Advantage of creating subnet:
+
+Security
+
+Privacy
+
+Isolation
+
+
+Two types of subnet:  Private Subnet[no access to the internet] and Public Subnet[access to the internet]
+
+                     Go the particular subnets- Attach route table - destination attach it to the Internet Gateway
+
+CIDR Range: How many ip addr available in subnet
+
+VPC -> Subnet -> CIDR -> 172.16.3.0/24  , 192.16.4.0/24 (I need 256 ipaddr)
+
+                     172.16.3.0
+                     172.16.3.1 etc
+
+Ports: 
