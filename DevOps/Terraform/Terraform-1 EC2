@@ -1,0 +1,163 @@
+TERRAFORM:
+
+
+. Terraform is an open source "Infrastructure as a Code' tool, created by HashiCorp
+
+.It was developed by Mitchell Hashimoto with Go Language in the year 2014 
+
+. All the configuration files used (HashiCorp Configuration Language) language for the code
+
+. Terraform used a simple syntax can provision infrastructure across multiple clouds and on premises
+
+. It is cloud agnostic it means the systems do not depend on single provider
+
+
+
+User   ---> terraform.tvars
+
+       ---> terraform.state
+
+       ---> terraform-provider.tf
+
+
+
+
+IAAC:
+
+. Infrastructure as Code(IaC) is a practice in DevOps that involves managing and provisioning infrastructure resources  using code and automation
+
+. Server automation and configuration management tools can often be used to achieve IaC. There are also solutions specifically for IaC.
+
+
+. By using these IAAC we can automate the creation of infra instead of manual process
+
+
+. IaC brings the principles of software development to infra management, allowing for more streamlined and agile operations
+
+
+. IaC tools, such as Terraform or Ansible, automate the provisioning and management of infra resources. By defining infra as code, you can create scripts or playbooks that automatically create, configure, and manage your infra in a consistent and repeatable manner.
+
+
+
+Alternatives:
+
+AWS --> CFT (JSON/YAML)
+AZURE --> ARM(Azure Resource Management) TEMPLATES (JSON)
+GCP --> Cloud Deployment Manager (YAML/PYTHON)
+PULUMI --> (PYTHON, JS, C#, GO & TYPE SCRIPT)
+ANSIBLE --> (YAML)
+PUPPET
+CHEF
+VAGARANT
+CROSSPLANE
+
+
+Terraform Setup:
+
+wget https://releases.hashicorp.com/terraform/1.13/terraform_1.1.3_;inux_amd64.zip
+
+
+sudo apt-get install zip -y
+
+Unzip terraform
+
+mv terraform /usr/local/bin/
+
+terraform version
+
+cd ~
+
+mkdir terraform & vim main.tf
+
+write the basic code
+
+Go to IAM and create a user called terraform and give both access give admin access
+
+
+. terraform version
+
+
+Terraform: We have 3 sections
+
+. Provider - In which cloud provider do we create and in which region and which region
+
+. Resource - Ec2 or s3 or vpc or any other service do we create 
+
+
+. Vars  - store the data
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Create an user in the IAM
+AmazonEC2FullAccess
+        
+
+vim main.tf
+
+
+provider "aws" {
+region = "ap-south-1"
+access_key = ""
+secret_key =  ""
+}
+
+resource "aws_instance" "one" {
+tags = {
+Name = "terraform-instance"
+Environment = "Dev"
+Project = "Swiggy"
+}
+ 
+ami = "amiid"
+instance_type = t2.micro
+key_name = "mykeyy"
+count=3
+availability_zone = "ap-south-1b"
+}
+
+
+. terraform init
+
+. terraform plan
+
+. terraform apply
+
+
+: yes
+
+
+. terraform destroy  --target=aws_instance.one{2}
+
+: yes
+
+
+
+. vim main.tf
+
+
+provider "aws" {
+region = "ap-south-1"
+access_key = ""
+secret_key =  ""
+}
+
+resource "aws_instance" "one" {
+tags = {
+Name = "terraform-instance"
+Environment = "Dev"
+Project = "Swiggy"
+}
+ 
+ami = "amiid"
+instance_type = t2.micro
+key_name = "mykeyy"
+count= 1
+availability_zone = "ap-south-1b"
+}
+
+. terraform apply --auto-approve
+
+. terraform destroy --auto-approve
+
+
