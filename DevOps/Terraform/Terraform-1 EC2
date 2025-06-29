@@ -161,3 +161,50 @@ availability_zone = "ap-south-1b"
 . terraform destroy --auto-approve
 
 
+vim main.tf
+
+provider "aws" {
+  alias      = "virginia"
+  region     = "us-east-1"
+  access_key = "<REPLACE_WITH_YOUR_ACCESS_KEY>"
+  secret_key = "<REPLACE_WITH_YOUR_SECRET_KEY>"
+}
+
+provider "aws" {
+  alias      = "mumbai"
+  region     = "ap-south-1"
+  access_key = "<REPLACE_WITH_YOUR_ACCESS_KEY>"
+  secret_key = "<REPLACE_WITH_YOUR_SECRET_KEY>"
+}
+
+resource "aws_instance" "one" {
+  provider        = aws.virginia
+  ami             = "ami-000ec6c25978d5999"
+  instance_type   = "t2.micro"
+  count           = 3
+  availability_zone = "us-east-1a"
+
+  tags = {
+    Name        = "terraform-instance"
+    Environment = "Dev"
+    Project     = "Cloud"
+  }
+}
+
+
+resource "aws_instance" "two" {
+  provider        = aws.mumbai
+  ami             = "ami-018046b953a698135"
+  instance_type   = "t2.micro"
+  count           = 3
+  availability_zone = "ap-south-1b"
+
+  tags = {
+    Name        = "terraform-instance"
+    Environment = "Dev"
+    Project     = "Cloud"
+  }
+}
+
+
+
