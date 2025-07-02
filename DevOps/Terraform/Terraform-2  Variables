@@ -1,0 +1,192 @@
+. Due to terraform backup files infra will be created the infra     configuration files will be created  
+
+. With the help of backup files we can compare the main.tf files
+
+. If code is deleted and new code is written in the same file old instances will be deleted and new instances will be created 
+
+  
+. mkdir flm
+
+. vim main.tf
+
+
+
+ provider "aws" {
+ region = "us-east-1"
+ access_key = ""
+ secret_key = ""
+}
+
+ resource "aws_instance" "one" {
+ ami = var.abc
+ instance_type = var.xyz
+ tags = {
+ Name = var.iname
+ }
+
+ count = var.icount
+ }
+
+ variable "abc" {
+ description = "This is ami id"
+ type =  string
+ default = "amid"
+ }
+
+ variable "xyz" {
+ description = "This is instance type"
+ type = string
+ default ="t2.micro"
+ }
+ 
+
+ variable "iname" {
+ type = string
+ default = "my-terraform-instance"
+}
+
+ variable "icount" {
+ type = number
+ default = 2 
+}
+
+. terraform init
+
+. terraform plan
+
+. terraform apply  --auto-approve
+
+. terraform destroy --auto-approve
+
+ provider "aws" {
+ region = "us-east-1"
+ access_key = ""
+ secret_key = ""
+}
+
+ resource "aws_instance" "one" {
+ ami = ""
+ instance_type = var.abc
+ }
+
+ variable "abc" {
+}
+
+
+. terraform apply --auto=approve-var= "abc=t2.micro"
+
+. terraform destroy --auto=approve-var= "abc=t2.micro"
+
+
+
+. vim main.tf
+
+
+
+ provider "aws" {
+ region = "us-east-1"
+ access_key = ""
+ secret_key = ""
+}
+
+ resource "aws_instance" "one" {
+ ami = var.ami_id
+ instance_type = var.itype
+ vpc_security_group_ids = [aws_security_group.demo-sg.id]
+ tags = {
+ Name = var.iname
+ }
+ availability_zone = var.az
+ root_block_device {
+ volume_size = var.vsize
+ }
+ count = var.icount
+ }
+
+ variable "ami_id" {
+ type = string
+ default = "amiid"
+}
+
+ variable "itype" {
+ type = string
+ default = "t2.micro"
+ }
+
+ variable "iname" {
+ type = string
+ default = "cloud"
+ }
+
+ variable "az" {
+ type = string
+ default = "us-east-1"
+ }
+
+ variable "vsize" {
+ type = number
+ default = 12
+ }
+ 
+ variable "icount" {
+ type = number
+ default = 1
+ }
+
+ 
+. vim security.tf
+
+  resource "aws_security_group" "demo-sg" {
+  name = "sec-grp"
+  description = "This is my sg created using terraform"
+  
+  ingress {
+  from_port = 22
+  to_port = 22
+  protocol = "tcp"
+  cidr_blocks = {""}
+  }
+
+  egress {
+  from_port = 22
+  to_port = 22
+  protocol = "tcp"
+  cidr_blocks = {""}
+  }
+
+
+  ingress {
+  from_port = 8080
+  to_port = 8080
+  protocol = "tcp"
+  cidr_blocks = {""}
+  }
+
+  egress {
+  from_port = 8080
+  to_port = 8080
+  protocol = "tcp"
+  cidr_blocks = {""}
+  }
+
+  ingress {
+  from_port = 0
+  to_port = 0
+  protocol = "-1"
+  cidr_blocks = {""}
+  }
+
+  egress {
+  from_port = 0
+  to_port = 0
+  protocol = "-1"
+  cidr_blocks = {""}
+  }
+
+  }
+
+. terraform init
+
+. terraform plan
+
+. terraform apply --auto-approve
