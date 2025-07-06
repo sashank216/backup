@@ -1,0 +1,283 @@
+SIMPLE STORAGE SERVICE
+
+. IT IS HUGHLY SCALABE , SECURABLE, DURABLE TO STORE THE DATA
+
+. EASY TO STORE AND RETRIEVE THE DATA
+
+. OBJECT BASED STORAGE AND DATA IS SPREAD MULTIPLE REGIONS
+
+. CUSTOMER OF ALL SIZES AND INDUSTRIES CAN USE AMAZON S3 TO STORE AND PROTECT ANY AMOUNT DATA FOR A RANGE OF USE CASES, SUCH AS DATA LAKES, WEBSITES, MOBILE APPLICATIONS, BACKUP AND RESTORE, ARCHIVE, ENTERPRISE APPLICATIONS, IoT devices and big data analytics
+
+
+BUCKETS:
+
+. IF YOU CREATE A ROOT LEVEL FOLDER THEN IT IS CALLED AS BUCKETS
+
+. USED TO STORE OBJECTS
+
+. BUCKET OWNERSHIP IS NOT TRANSFERABLE TO ANOTHER ACCOUNT
+
+. AFTER YOU CREATE A BUCKET DIRECTLY WE NEED TO MAKE IT EMPTY
+
+. THE FILES WHICH ARE STORED IN S3 CAN BE FROM 0 BYTES TO 5TB
+
+. BY DEFAULT, YOU CAN CREATE UP TO 100 BUCKETS IN EACH OF YOUR AWS ACCOUNTS.
+
+. IF YOU NEED ADDDITIONAL BUCKETS, YOU CA INCREASE YOUR ACCOUNT BUCKET LIMIT TO A MAXIMUM TO 1000 BUCKETS BY SUBMITTING A SERVICE LIMIT INCREASE
+
+
+
+Different Types of Storages in AWS:
+
+S3: Object Based Storage
+EBS: Block Level Storage
+EFS: Elastic File System [File Level Storage]
+
+
+S3: Application logs, Infra Logs, Config files - Stored
+EBS: In Server where files , folder and tools are stored
+EFS: Replication of file from one server to another 
+
+
+
+OBJECTS:
+
+. Files that you stored in a bucket is called as objects
+
+. To store your data in Amazon S3, you work with resource known as buckets and objects
+
+. A bucket is a container for objects
+
+. An object is a file and any metadata that describes that file
+
+. With Amazon S3, you pay only for what you use
+
+
+Depending on the size of the data you are uploading, Amazon S3 offers the following options:
+
+-> Upload an object in a single operation using the AWS SDKs, Rest API, or AWS CLI - with single PUT operation, you can upload a single object up to 5GB in size
+
+-> Upload a single object using the Amazon S3 Console - with the Amazon S# Console, you can upload a single object up to 160 GB in size
+
+
+-> Upload an object in parts using the AWS SDKs, REST API, or AWS CLI - Using the multipart upload API, you can upload a single large object, up to 5TB in size.
+
+
+Major Components OF Object:
+
+. Key : Name of Object
+
+. Value : Data in bytes
+
+. Version ID: Shows Versioning ID for Uniquness of object
+
+. Meta Data: Data about data we are strong
+
+
+Rules to create a bucket
+
+. Unique Name
+
+. Name should be 3 to 63 characters
+
+. Only lower case is valid
+
+. Should not be in IP format
+
+. Must begin and end with number or letter
+
+
+S3 Versioning:
+
+. It will enable you the multiple versions of the same file
+
+. It will retrieve the object which was accidently terminated
+
+. It can retrieve the previous versions of the objects
+
+. By default it will not enable , we need to enable it
+
+. We cannot disable the versioning only we can able to suspend it
+
+
+
+Cross Region Application:
+
+One region application in bucket to another region application to bucket
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Bucket created by CLI command:
+
+
+ AWS CLI Syntax:
+
+ Cloud Service Command
+
+ AWS S3 LS
+
+. aws s3 ls
+
+. aws configure
+
+create user and give amazons3fullaccess permission:
+
+. aws s3 ls
+
+. aws s3 mb s3://cloudaws.engineer
+
+. aws s3 mb s3://cloudazure.engineer
+
+. aws s3 ls
+
+Objects in the bucket
+
+. aws s3 ls s3://cloudaws.engineer
+
+. touch devops.txt
+
+. aws s3 cp devops.txt s3://cloudaws.engineer
+
+. touch aws.txt
+
+. aws s3 cp aws.txt s3://cloudaws.engineer
+
+copy s3 url
+
+
+. aws s3 cp _____________________ .
+
+. aws s3 cp ______________________ .
+
+
+To delete a bucket
+
+. aws s3 rb s3://cloudazure.engineer
+
+. aws s3 rb s3://cloudaws.engineer
+
+. aws s3 rm s3://cloudaws.engineer --recursive
+
+. aws s3 rb s3://cloudazure.engineer
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Creating a s3 bucket using Terraform:
+
+Install Terraform:
+
+
+
+vim main.tf
+
+provider "aws" {
+region = "us-east-1'
+access_key = ""
+secret_key = ""
+}
+
+resource "aws_s3_bucket" "one" {
+bucket = "aws.terraform-bucket"
+}
+
+
+resource "aws_s3_bucket_ownership_controls" "two" [
+bucket = aws_s3_bucket.one.id
+rule {
+object_ownership = "BucketOwnerPreferred"
+}
+}
+
+resource "aws_s3_bucket_acl" "three" {
+depends_on = [aws_s3_bucket_ownership_controls.two]
+bucket = aws_s3_bucket.one.id
+acl = "private"
+}
+
+resource "aws_s3_bucket_versioning" "four" {
+bucket = aws-s3_bucket.one.id
+versioning_configuration {
+status = "Enabled"
+}
+
+
+
+
+. terraform providers
+
+. terraform init
+
+. terraform validate
+
+. terraform plan
+
+. terraform apply --auto-approve
+
+
+
+
+Create a seperate server for jenkins : because jenkins and terraform cant be in the same server because of the large memory then t2.medium is required
+
+
+. sudo -i
+
+sudo wget -O /etc/yum.repos.d/jenkins.repo \
+    https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+sudo yum upgrade
+# Add required dependencies for the jenkins package
+sudo yum install fontconfig java-21-openjdk
+sudo yum install jenkins
+sudo systemctl daemon-reload
+systemctl start jenkins
+yum install git java-1.8.0-Openjdk maven -y
+
+pluggin in jenkins
+
+
+S3 publisher
+
+This is a olugin to upload files Amazon S3 buckets
+
+Create a job
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+why no nexus and leaning towards s3:
+
+nexus - t2.medium [cost] completely maintain the separate server
+
+s3 - 5gb free - top of that pay to go
+
+s3 - can maintain multiple version , nexus cannot maintain the multiple versions
+
+
+
+
+
+
+Storage Classes in S3:
+
+Storage Classes in S3:
+
+
+
+
+
