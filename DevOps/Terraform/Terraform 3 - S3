@@ -200,7 +200,7 @@ acl = "private"
 }
 
 resource "aws_s3_bucket_versioning" "four" {
-bucket = aws-s3_bucket.one.id
+bucket = aws_s3_bucket.one.id
 versioning_configuration {
 status = "Enabled"
 }
